@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.3
+Version:	0.4
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -45,6 +45,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Oct 15 2012 James Slagle <jslagle@redhat.com> 0.4-1
+- Updated gitignore (jslagle@redhat.com)
+- Updates (jslagle@redhat.com)
+
 * Mon Oct 15 2012 James Slagle <jslagle@redhat.com> 0.3-1
 - Package egg files (jslagle@redhat.com)
 - Add setup.py (jslagle@redhat.com)
