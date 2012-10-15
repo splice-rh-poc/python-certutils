@@ -16,11 +16,13 @@ from glob import glob
 import datetime
 import logging
 import os
+import shutil
 import subprocess
+import tempfile
 import time
 
 import M2Crypto
-from M2Crypto import X509, BIO
+from M2Crypto import X509, BIO, RSA, EVP, util
 
 LOG = logging.getLogger(__name__)
 
@@ -319,10 +321,10 @@ class CertUtils(object):
         cert_name = 'rhic'
 
         try:
-            _generate_cert_request(dest_dir, cert_name, cn)
-            exit_code = _sign_request(dest_dir, cert_name, ca_cert_filename, ca_key_filename, days)
-            public_cert = open(_cert_filename(dest_dir, cert_name)).read()
-            private_key = open(_priv_key_filename(dest_dir, cert_name)).read()
+            self._generate_cert_request(dest_dir, cert_name, cn)
+            exit_code = self._sign_request(dest_dir, cert_name, ca_cert_filename, ca_key_filename, days)
+            public_cert = open(self._cert_filename(dest_dir, cert_name)).read()
+            private_key = open(self._priv_key_filename(dest_dir, cert_name)).read()
         finally:
             shutil.rmtree(dest_dir)
 
@@ -330,9 +332,9 @@ class CertUtils(object):
 
     def _generate_cert_request(self, dest_dir, cert_name, cn):
 
-        priv_key_filename = _priv_key_filename(dest_dir, cert_name)
-        cert_filename = _cert_filename(dest_dir, cert_name)
-        csr_filename = _csr_filename(dest_dir, cert_name)
+        priv_key_filename = self._priv_key_filename(dest_dir, cert_name)
+        cert_filename = self._cert_filename(dest_dir, cert_name)
+        csr_filename = self._csr_filename(dest_dir, cert_name)
 
         # Generate private key
         rsa = RSA.gen_key(2048, 65537)
@@ -386,8 +388,8 @@ class CertUtils(object):
         @return: exit code of the openssl process to sign the certificate request
         @rtype:  int
         '''
-        csr_filename = _csr_filename(dest_dir, cert_name)
-        crt_filename = _cert_filename(dest_dir, cert_name)
+        csr_filename = self._csr_filename(dest_dir, cert_name)
+        crt_filename = self._cert_filename(dest_dir, cert_name)
         ca_srl_filename = os.path.join(os.path.dirname(ca_cert_filename), 
             '%s.srl' % (os.path.basename(os.path.splitext(ca_cert_filename)[0])))
 
