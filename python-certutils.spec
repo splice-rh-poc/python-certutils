@@ -41,6 +41,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{python_sitelib}/certutils
+%{python_sitelib}/python_certutils*
 
 
 %changelog
