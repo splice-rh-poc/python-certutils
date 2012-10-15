@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.1
+Version:	0.2
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -44,3 +44,6 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Oct 15 2012 James Slagle <jslagle@redhat.com> 0.2-1
+- new package built with tito
+
