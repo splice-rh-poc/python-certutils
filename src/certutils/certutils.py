@@ -294,7 +294,7 @@ class CertUtils(object):
         return self.crl_location
 
 
-    def generate(self, cn, ca_cert_filename, ca_key_filename, days):
+    def generate(self, ca_cert_filename, ca_key_filename, days, name_attributes):
         '''
         Generates an X509 certificate
 
@@ -321,7 +321,7 @@ class CertUtils(object):
         cert_name = 'rhic'
 
         try:
-            self._generate_cert_request(dest_dir, cert_name, cn)
+            self._generate_cert_request(dest_dir, cert_name, name_attributes)
             exit_code = self._sign_request(dest_dir, cert_name, ca_cert_filename, ca_key_filename, days)
             public_cert = open(self._cert_filename(dest_dir, cert_name)).read()
             private_key = open(self._priv_key_filename(dest_dir, cert_name)).read()
@@ -330,7 +330,7 @@ class CertUtils(object):
 
         return public_cert, private_key
 
-    def _generate_cert_request(self, dest_dir, cert_name, cn):
+    def _generate_cert_request(self, dest_dir, cert_name, name_attributes):
 
         priv_key_filename = self._priv_key_filename(dest_dir, cert_name)
         cert_filename = self._cert_filename(dest_dir, cert_name)
@@ -364,7 +364,8 @@ class CertUtils(object):
         request.set_version(3)
 
         name = request.get_subject()
-        name.CN = cn
+        for name_attr, value in name_attributes.items():
+            setattr(name, name_attr, value)
 
         request.sign(pk, 'sha1')
 
