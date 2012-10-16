@@ -10,7 +10,7 @@ URL:        https://github.com/splice/python-certutils
 Source0:	%{name}-%{version}.tar.gz
 
 BuildRequires:  python-setuptools
-Requires:	    python2-devel
+BuildRequires:	    python2-devel
 
 
 %description
