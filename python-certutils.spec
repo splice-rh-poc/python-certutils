@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.5
+Version:	0.6
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -45,6 +45,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Oct 16 2012 James Slagle <jslagle@redhat.com> 0.6-1
+- Allow any subject attribute to be passed to the request generate method
+  (jslagle@redhat.com)
+- This should be a BuildRequires (jslagle@redhat.com)
+
 * Tue Oct 16 2012 James Slagle <jslagle@redhat.com> 0.5-1
 - Fix default parameter value (jslagle@redhat.com)
 
