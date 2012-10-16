@@ -36,7 +36,7 @@ except:
 
 class CertUtils(object):
 
-    def __init__(self, log_failed_cert=True, max_num_certs_in_chain=True, 
+    def __init__(self, log_failed_cert=True, max_num_certs_in_chain=100, 
                  verbose=True, crl_location=''):
         self.log_failed_cert = log_failed_cert
         self.log_failed_cert_verbose = verbose
