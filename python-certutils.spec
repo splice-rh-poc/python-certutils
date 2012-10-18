@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.6
+Version:	0.7
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -45,6 +45,12 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Oct 18 2012 John Matthews <jmatthews@redhat.com> 0.7-1
+- Fixed parsing of a certs subject to use m2crypto and not our own code, now
+  able to parse subjects with more than just CN set. (jmatthews@redhat.com)
+- SELinux script currently only needed for development setup, applies 'lib_t'
+  to src directory (jmatthews@redhat.com)
+
 * Tue Oct 16 2012 James Slagle <jslagle@redhat.com> 0.6-1
 - Allow any subject attribute to be passed to the request generate method
   (jslagle@redhat.com)
