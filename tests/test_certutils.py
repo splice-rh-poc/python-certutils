@@ -65,6 +65,6 @@ class CertUtilsTest(TestCase):
 
     def test_get_subject_pieces(self):
         pieces = self.cert_utils.get_subject_pieces(self.valid_identity_cert_pem)
-        self.assertEquals(len(pieces), 1)
+        self.assertTrue(pieces["CN"])
         self.assertEquals(pieces["CN"], self.expected_valid_identity_uuid)
 

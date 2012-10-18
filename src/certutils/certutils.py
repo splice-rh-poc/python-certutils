@@ -176,14 +176,21 @@ class CertUtils(object):
             return certs
         return certs
 
-    def get_subject_pieces(self, cert_str):
+    def get_subject_pieces(self, cert_str, lookup=None):
         """
         @param cert_str a x509 certificate as a string
         @type cert_str: str
 
+        @param lookup, an optional list of strings to represent subject
+                        identifiers to look up, example: ['CN', 'C', 'O', ..]
+        @type lookup: [str]
+
         @return a dictionary of broken out items in the certs subject. example {"CN":"hostname",...}
         @rtype: {}
         """
+        pieces = {}
+        if not lookup:
+            lookup = ["C", "CN", "Email", "GN", "L", "O", "OU", "SN"]
         x509_certs = self.get_certs_from_string(cert_str)
         # Grab the first cert if it exists
         if not x509_certs:
@@ -191,14 +198,10 @@ class CertUtils(object):
         c = x509_certs[0]
         subject = c.get_subject()
         if not subject:
-            return None
-        subject = subject.as_text()
-        items = subject.split("/")
-        info = {}
-        for pair in items:
-            pieces = pair.split("=")
-            info[pieces[0]] = pieces[1]
-        return info
+            return pieces
+        for key in lookup:
+            pieces[key] = getattr(subject, key)
+        return pieces
 
     def get_debug_info_certs(self, cert, ca_certs, crl_stack):
         """
