@@ -29,10 +29,14 @@ popd
 
 %install
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/%{_sysconfdir}/splice/certs/
+mkdir -p %{buildroot}/%{_bindir}
+
 pushd src
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 popd
-
+cp -R etc/splice/certs/generate  %{buildroot}/%{_sysconfdir}/splice/certs/
+cp bin/* %{buildroot}/%{_bindir}
 
 %clean
 rm -rf %{buildroot}
@@ -42,6 +46,9 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{python_sitelib}/certutils
 %{python_sitelib}/python_certutils*
+%{_sysconfdir}/splice/certs/generate
+%{_bindir}
+
 
 
 %changelog
