@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.7
+Version:	0.8
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -45,6 +45,15 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Oct 25 2012 John Matthews <jmatthews@redhat.com> 0.8-1
+- Update for selinux rules in developer setup (jmatthews@redhat.com)
+- Adding x509 certificate generation & configuration scripts - Will be able to
+  create a new CA and Server Certificate for https connections - Configures
+  apache through the splice.conf to use these generated certificates
+  (jmatthews@redhat.com)
+- Added a CertificateParseException and updated get_subject_pieces() to throw
+  this when bad data is passed in (jmatthews@redhat.com)
+
 * Thu Oct 18 2012 John Matthews <jmatthews@redhat.com> 0.7-1
 - Fixed parsing of a certs subject to use m2crypto and not our own code, now
   able to parse subjects with more than just CN set. (jmatthews@redhat.com)
