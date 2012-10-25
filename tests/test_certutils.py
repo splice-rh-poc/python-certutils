@@ -19,7 +19,7 @@ import os
 import sys
 
 sys.path.insert(0, '../src')
-from certutils.certutils import CertUtils
+from certutils.certutils import CertUtils, CertificateParseException
 
 TEST_DATA_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)), "data")
@@ -37,8 +37,8 @@ class CertUtilsTest(TestCase):
         self.invalid_identity_cert_pem = os.path.join(TEST_DATA_DIR, "invalid_cert", "invalid.cert")
         self.invalid_identity_cert_pem = open(self.invalid_identity_cert_pem, "r").read()
         # a valid cert, signed by the below CA, 'root_ca_pem'
-        self.valid_identity_cert_pem =  os.path.join(TEST_DATA_DIR, "valid_cert", "valid.cert")
-        self.valid_identity_cert_pem = open(self.valid_identity_cert_pem, "r").read()
+        self.valid_identity_cert_path =  os.path.join(TEST_DATA_DIR, "valid_cert", "valid.cert")
+        self.valid_identity_cert_pem = open(self.valid_identity_cert_path, "r").read()
         # CA
         self.root_ca_crt_path = os.path.join(TEST_DATA_DIR, 'ca', 'ca.crt')
         self.root_ca_key_path = os.path.join(TEST_DATA_DIR, 'ca', 'ca.key')
@@ -68,3 +68,10 @@ class CertUtilsTest(TestCase):
         self.assertTrue(pieces["CN"])
         self.assertEquals(pieces["CN"], self.expected_valid_identity_uuid)
 
+    def test_get_subject_pieces_with_filepath(self):
+        caught = False
+        try:
+            pieces = self.cert_utils.get_subject_pieces(self.valid_identity_cert_path)
+        except CertificateParseException, e:
+            caught = True
+        self.assertTrue(caught)

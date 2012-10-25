@@ -33,6 +33,14 @@ except:
     M2CRYPTO_HAS_CRL_SUPPORT = False
     LOG.warning("**M2Crypto<%s> lacks patch for using Certificate Revocation Lists**" % (M2Crypto.version))
 
+class CertificateParseException(Exception):
+    def __init__(self, attempted_cert):
+        super(CertificateParseException, self).__init__(self)
+        self.attempted_cert = attempted_cert
+
+    def __str__(self):
+        return "Unable to parse certificate '%s'. Are you sure this is the ''contents'' " \
+               "of the certificate and not just the filepath?" % (self.attempted_cert)
 
 class CertUtils(object):
 
@@ -194,7 +202,7 @@ class CertUtils(object):
         x509_certs = self.get_certs_from_string(cert_str)
         # Grab the first cert if it exists
         if not x509_certs:
-            return None
+            raise CertificateParseException(cert_str)
         c = x509_certs[0]
         subject = c.get_subject()
         if not subject:
