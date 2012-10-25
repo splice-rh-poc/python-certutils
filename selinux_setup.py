@@ -23,6 +23,9 @@ LABELS = {
         "lib_t": [
                 ("%s(/.*)?", os.path.join(BASE_DIR, "src")),
         ],
+         "httpd_sys_content_t": [
+                ("%s(/.*)?", os.path.join(BASE_DIR, "etc/splice")),
+        ],
 }
 
 class SetupException(Exception):
