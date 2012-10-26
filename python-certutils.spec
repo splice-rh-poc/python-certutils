@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.10
+Version:	0.11
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -52,6 +52,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Oct 26 2012 John Matthews <jmatthews@redhat.com> 0.11-1
+- Update to comment out default Apache ssl settings (jmatthews@redhat.com)
+
 * Fri Oct 26 2012 John Matthews <jmatthews@redhat.com> 0.10-1
 - Changed names of generated certs to clearly call out they are for the HTTPS
   setup (jmatthews@redhat.com)
