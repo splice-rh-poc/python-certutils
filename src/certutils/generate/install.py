@@ -30,17 +30,33 @@ def copy_file(src, dst):
         return False
     return True
 
-def update_httpd_config(server_key, server_cert, ca_cert, httpd_ssl_config_file):
+def comment_out_ssl_settings(httpd_ssl_config_file="/etc/httpd/conf.d/ssl.conf"):
+    cmd = "sed -i 's/^SSLCertificateFile/#SSLCertificateFile/' %s" % (httpd_ssl_config_file)
+    if not run_command(cmd):
+        return False
+    cmd = "sed -i 's/^SSLCertificateKeyFile/#SSLCertificateKeyFile/' %s" % (httpd_ssl_config_file)
+    if not run_command(cmd):
+        return False
+    cmd = "sed -i 's/^SSLCACertificateFile/#SSLCACertificateFile/' %s" % (httpd_ssl_config_file)
+    if not run_command(cmd):
+        return False
+    cmd = "sed -i 's/^SSLCertificateChainFile/#SSLCertificateChainFile/' %s" % (httpd_ssl_config_file)
+    if not run_command(cmd):
+        return False
+    return True
+
+
+def update_httpd_config(server_key, server_cert, ca_cert, app_ssl_config_file):
     server_key = server_key.replace("/", "\/")
     server_cert = server_cert.replace("/", "\/")
     ca_cert = ca_cert.replace("/", "\/")
-    cmd = "sed -i 's/^SSLCertificateFile.*/SSLCertificateFile %s/' %s" % (server_cert, httpd_ssl_config_file)
+    cmd = "sed -i 's/^SSLCertificateFile.*/SSLCertificateFile %s/' %s" % (server_cert, app_ssl_config_file)
     if not run_command(cmd):
         return False
-    cmd = "sed -i 's/^SSLCertificateKeyFile.*/SSLCertificateKeyFile %s/' %s" % (server_key, httpd_ssl_config_file)
+    cmd = "sed -i 's/^SSLCertificateKeyFile.*/SSLCertificateKeyFile %s/' %s" % (server_key, app_ssl_config_file)
     if not run_command(cmd):
         return False
-    cmd = "sed -i 's/^SSLCACertificateFile.*/SSLCACertificateFile %s/' %s" % (ca_cert, httpd_ssl_config_file)
+    cmd = "sed -i 's/^SSLCACertificateFile.*/SSLCACertificateFile %s/' %s" % (ca_cert, app_ssl_config_file)
     if not run_command(cmd):
         return False
     return True
@@ -72,6 +88,10 @@ def run(default_install_dir="/etc/pki/splice", httpd_ssl_config_file="/etc/httpd
     #    print "Error installing ca_cert"
     #    sys.exit(1)
 
+    if not comment_out_ssl_settings():
+        print "Unable to comment out the existing SSL settings in apache's ssl.conf"
+        sys.exit(1)
+    print "Apache's default ssl settings have been commented out"
     #if not update_httpd_config(installed_server_key, installed_server_cert, installed_ca_cert):
     if not update_httpd_config(server_key, server_cert, ca_cert, httpd_ssl_config_file):
         print "Error updating httpd"
