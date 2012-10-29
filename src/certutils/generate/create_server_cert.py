@@ -19,17 +19,20 @@
 import os
 import sys
 
-from base import run_command, get_parser, add_hostname_option
+from base import add_hostname_option, check_dirs, get_parser, run_command
 
 def create_server_key(server_key):
+    check_dirs(server_key)
     cmd = "openssl genrsa -out %s 2048" % (server_key)
     return run_command(cmd)
 
 def create_server_csr(server_key, csr, hostname):
+    check_dirs(csr)
     cmd = "openssl req -new -key %s -out %s -subj '/C=US/ST=NC/L=Raleigh/O=Red Hat/OU=Splice/CN=%s'" % (server_key, csr, hostname)
     return run_command(cmd)
 
 def create_server_cert(server_cert, server_csr, ca_cert, ca_key, ca_serial):
+    check_dirs(server_cert)
     cmd = "openssl x509 -req -days 10950 -CA %s -CAkey %s -in %s -out %s -CAserial %s" \
             % (ca_cert, ca_key, server_csr, server_cert, ca_serial)
     if not os.path.exists(ca_serial):
