@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.12
+Version:	0.13
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -52,6 +52,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Mon Oct 29 2012 John Matthews <jmatthews@redhat.com> 0.13-1
+- Fix to create output directory when generating splice identity certs
+  (jmatthews@redhat.com)
+
 * Fri Oct 26 2012 John Matthews <jmatthews@redhat.com> 0.12-1
 - Added script to generate a Splice Server identity certificate for testing
   (jmatthews@redhat.com)
