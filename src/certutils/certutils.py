@@ -167,7 +167,7 @@ class CertUtils(object):
         try:
             if not M2CRYPTO_HAS_CRL_SUPPORT:
                 # Old versions of M2Crypto behave differently and would loop indefinitely over load_cert_bio
-                return X509.load_cert_string(data)
+                return [X509.load_cert_string(data)]
             for index in range(0, self.max_num_certs_in_chain):
                 # Read one cert at a time, 'bio' stores the last location read
                 # Exception is raised when no more cert data is available
