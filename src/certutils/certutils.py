@@ -51,6 +51,22 @@ class CertUtils(object):
         self.max_num_certs_in_chain = max_num_certs_in_chain
         self.crl_location = crl_location
 
+    def validate_priv_key_to_certificate(self, priv_key, cert_pem):
+        """
+        Validates if a given private key matches the given certificate
+        @param priv_key: string private key data in PEM format
+        @param cert_pem: string certificate data in PEM format
+        @return: True if matches, False if not
+        """
+        cert = X509.load_cert_string(cert_pem)
+        pub_key = cert.get_pubkey()
+        pub_key.get_modulus()
+        priv_key = EVP.load_key_string(priv_key)
+        if pub_key.get_modulus() == priv_key.get_modulus():
+            return True
+        return False
+
+
     def validate_certificate(self, cert_pem, ca_pem, crl_pems=None, check_crls=True, crl_dir=None):
         '''
         Validates a certificate against a CA certificate and CRLs if they exist.
@@ -441,5 +457,9 @@ class CertFileUtils(CertUtils):
     def validate_certificate(self, cert_filename, ca_filename):
         cert_pem = self.read_pem(cert_filename)
         ca_pem = self.read_pem(ca_filename)
+        return super(CertFileUtils, self).validate_certificate(cert_pem, ca_pem)
 
-        super(CertFileUtils, self).validate_certificate(cert_pem, ca_pem)
+    def validate_priv_key_to_certificate(self, key_filename, cert_filename):
+        key_pem = self.read_pem(key_filename)
+        cert_pem = self.read_pem(cert_filename)
+        return super(CertFileUtils, self).validate_priv_key_to_certificate(key_pem, cert_pem)

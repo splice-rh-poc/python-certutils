@@ -19,7 +19,7 @@ import os
 import sys
 
 sys.path.insert(0, '../src')
-from certutils.certutils import CertUtils, CertificateParseException
+from certutils.certutils import CertUtils, CertFileUtils, CertificateParseException
 
 TEST_DATA_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)), "data")
@@ -34,8 +34,9 @@ class CertUtilsTest(TestCase):
         super(CertUtilsTest, self).setUp()
         # Test Certificate Data
         # invalid cert, signed by a CA other than 'root_ca_pem'
-        self.invalid_identity_cert_pem = os.path.join(TEST_DATA_DIR, "invalid_cert", "invalid.cert")
-        self.invalid_identity_cert_pem = open(self.invalid_identity_cert_pem, "r").read()
+        self.invalid_key_path = os.path.join(TEST_DATA_DIR, 'invalid_cert', 'invalid.key')
+        self.invalid_identity_cert_path = os.path.join(TEST_DATA_DIR, "invalid_cert", "invalid.cert")
+        self.invalid_identity_cert_pem = open(self.invalid_identity_cert_path, "r").read()
         # a valid cert, signed by the below CA, 'root_ca_pem'
         self.valid_identity_cert_path =  os.path.join(TEST_DATA_DIR, "valid_cert", "valid.cert")
         self.valid_identity_cert_pem = open(self.valid_identity_cert_path, "r").read()
@@ -43,6 +44,7 @@ class CertUtilsTest(TestCase):
         self.root_ca_crt_path = os.path.join(TEST_DATA_DIR, 'ca', 'ca.crt')
         self.root_ca_key_path = os.path.join(TEST_DATA_DIR, 'ca', 'ca.key')
         self.root_ca_srl_path = os.path.join(TEST_DATA_DIR, 'ca', 'ca.srl')
+
         self.root_ca_crt = open(self.root_ca_crt_path).read()
         self.root_ca_key = open(self.root_ca_key_path).read()
         self.root_ca_pem = open(self.root_ca_srl_path).read()
@@ -75,3 +77,33 @@ class CertUtilsTest(TestCase):
         except CertificateParseException, e:
             caught = True
         self.assertTrue(caught)
+
+    def test_validate_priv_key_to_certificate(self):
+        key = open(self.root_ca_key_path).read()
+        cert = open(self.root_ca_crt_path).read()
+        self.assertTrue(self.cert_utils.validate_priv_key_to_certificate(key, cert))
+        invalid_key = open(self.invalid_key_path).read()
+        self.assertFalse(self.cert_utils.validate_priv_key_to_certificate(invalid_key, cert))
+
+
+class CertFileUtilsTest(CertUtilsTest):
+    def setUp(self):
+        super(CertFileUtilsTest, self).setUp()
+        self.cert_file_utils = CertFileUtils()
+
+    def tearDown(self):
+        super(CertFileUtilsTest, self).tearDown()
+
+    def test_validate_certificate_pem_valid(self):
+        self.assertTrue(self.cert_file_utils.validate_certificate(self.valid_identity_cert_path,
+            self.root_ca_crt_path))
+
+    def test_validate_certificate_pem_invalid(self):
+        self.assertFalse(self.cert_file_utils.validate_certificate(self.invalid_identity_cert_path,
+            self.root_ca_crt_path))
+
+    def test_validate_priv_key_to_certificate_valid(self):
+        self.assertTrue(self.cert_file_utils.validate_priv_key_to_certificate(self.root_ca_key_path, self.root_ca_crt_path))
+
+    def test_validate_priv_key_to_certificate_invvalid(self):
+        self.assertFalse(self.cert_file_utils.validate_priv_key_to_certificate(self.invalid_key_path, self.root_ca_crt_path))
