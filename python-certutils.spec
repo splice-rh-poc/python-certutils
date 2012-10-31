@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.14
+Version:	0.15
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -52,6 +52,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Oct 31 2012 John Matthews <jmatthews@redhat.com> 0.15-1
+- Fix for CertFileUtils & Added validate private key to certificate method
+  (jmatthews@redhat.com)
+
 * Wed Oct 31 2012 John Matthews <jmatthews@redhat.com> 0.14-1
 - Update for parsing a cert when running with an unpatched m2crypto
   (jmatthews@redhat.com)
