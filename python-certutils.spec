@@ -1,6 +1,6 @@
 # python-certutils package ----------------------------------------------------
 Name:		python-certutils
-Version:	0.13
+Version:	0.14
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -52,6 +52,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Wed Oct 31 2012 John Matthews <jmatthews@redhat.com> 0.14-1
+- Update for parsing a cert when running with an unpatched m2crypto
+  (jmatthews@redhat.com)
+
 * Mon Oct 29 2012 John Matthews <jmatthews@redhat.com> 0.13-1
 - Fix to create output directory when generating splice identity certs
   (jmatthews@redhat.com)
