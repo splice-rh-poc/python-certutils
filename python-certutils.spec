@@ -1,4 +1,5 @@
 # python-certutils package ----------------------------------------------------
+%define debug_package %{nil}
 Name:		python-certutils
 Version:	0.15
 Release:	1%{?dist}
