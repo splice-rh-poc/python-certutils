@@ -1,7 +1,7 @@
 # python-certutils package ----------------------------------------------------
 %define debug_package %{nil}
 Name:		python-certutils
-Version:	0.15
+Version:	0.16
 Release:	1%{?dist}
 Summary:	Common code for manipulating X.509 certificates
 
@@ -53,6 +53,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Aug 13 2013 John Matthews <jwmatthews@gmail.com> 0.16-1
+- Don't build a debuginfo package (jwmatthews@gmail.com)
+
 * Wed Oct 31 2012 John Matthews <jmatthews@redhat.com> 0.15-1
 - Fix for CertFileUtils & Added validate private key to certificate method
   (jmatthews@redhat.com)
